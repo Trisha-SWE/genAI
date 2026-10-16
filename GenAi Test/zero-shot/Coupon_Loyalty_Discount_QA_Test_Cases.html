@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coupon and Loyalty Discount QA Test Cases</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: #182338;
+      background: #f4f7fb;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --navy: #13233f;
+      --blue: #3568e8;
+      --muted: #65738a;
+      --line: #e3e9f2;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; }
+    .page { max-width: 1480px; margin: 0 auto; padding: 38px 30px 64px; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 40px 44px;
+      border-radius: 24px;
+      color: white;
+      background: radial-gradient(circle at 86% 10%, #698cff 0, transparent 27%),
+                  linear-gradient(120deg, #142744, #203c70 65%, #3156a4);
+      box-shadow: 0 18px 45px #1a34702b;
+    }
+    .hero::after {
+      position: absolute;
+      right: -66px;
+      bottom: -180px;
+      width: 390px;
+      height: 390px;
+      border: 1px solid #ffffff24;
+      border-radius: 50%;
+      content: "";
+      box-shadow: 0 0 0 38px #ffffff0a, 0 0 0 78px #ffffff08;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      color: #c4d4ff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 8px; height: 8px; border-radius: 50%; background: #71e1c0; content: ""; }
+    h1 { max-width: 760px; margin: 0; font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -0.045em; line-height: 1.08; }
+    .intro { max-width: 850px; margin: 16px 0 0; color: #d7e1f7; font-size: 1.02rem; line-height: 1.7; }
+    .hero-actions { position: relative; z-index: 1; display: flex; gap: 10px; margin-top: 25px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid #ffffff45;
+      border-radius: 10px;
+      color: white;
+      background: #ffffff12;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+    .button:hover { background: #ffffff25; transform: translateY(-1px); }
+    .button.primary { border-color: white; color: #1d3972; background: white; }
+    .button.primary:hover { background: #edf2ff; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 20px 0 28px; }
+    .metric {
+      padding: 19px 21px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 5px 18px #20385c08;
+    }
+    .metric strong { display: block; color: var(--navy); font-size: 1.7rem; letter-spacing: -0.04em; }
+    .metric span { display: block; margin-top: 4px; color: var(--muted); font-size: 0.83rem; }
+    .section-nav { display: flex; gap: 8px; overflow-x: auto; margin: 0 0 18px; padding: 4px 0 8px; }
+    .section-nav a {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #4c5e79;
+      background: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .section-nav a:hover { border-color: #a9bdf9; color: var(--blue); }
+    section {
+      scroll-margin-top: 20px;
+      margin: 18px 0;
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 8px 24px #20385c08;
+    }
+    .section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    h2 { margin: 0; color: var(--navy); font-size: 1.25rem; letter-spacing: -0.025em; }
+    .section-note { margin: 6px 0 0; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+    .section-tag { flex: 0 0 auto; padding: 6px 10px; border-radius: 999px; color: #365dc0; background: #eef3ff; font-size: 0.75rem; font-weight: 800; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; line-height: 1.55; }
+    th { position: sticky; top: 0; color: #566780; background: #f6f8fc; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.075em; text-transform: uppercase; }
+    td { color: #344258; font-size: 0.87rem; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:nth-child(even) { background: #fbfcfe; }
+    tbody tr:hover { background: #f2f6ff; }
+    td:first-child { color: #526580; font-family: "Segoe UI", Arial, sans-serif; font-size: 0.8rem; font-weight: 800; white-space: nowrap; }
+    .priority-critical, .priority-high, .priority-medium { white-space: nowrap; font-weight: 800; }
+    .priority-critical { color: #b42332; }
+    .priority-high { color: #a45b0a; }
+    .priority-medium { color: #53657e; }
+    .table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 14px; }
+    .table-toolbar p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .search {
+      width: min(100%, 310px);
+      min-height: 40px;
+      padding: 0 13px;
+      border: 1px solid #dce4ef;
+      border-radius: 10px;
+      color: #25344c;
+      background: #fff;
+      font: inherit;
+      font-size: 0.88rem;
+    }
+    .search:focus { border-color: #7898f4; outline: 3px solid #3568e81a; }
+    .footnote { margin: 14px 0 0; color: var(--muted); font-size: 0.83rem; line-height: 1.55; }
+    .footer { padding: 12px 0 0; color: #8190a5; font-size: 0.8rem; text-align: center; }
+    @media (max-width: 760px) {
+      .page { padding: 18px 14px 40px; }
+      .hero { padding: 29px 24px; border-radius: 18px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .metric { padding: 15px; }
+      section { padding: 18px 14px; }
+      .section-heading, .table-toolbar { align-items: stretch; flex-direction: column; }
+      .search { width: 100%; }
+    }
+    @media print {
+      :root { background: #fff; }
+      .page { max-width: none; padding: 0; }
+      .hero { padding: 20px; border-radius: 0; background: #1f3c68 !important; box-shadow: none; print-color-adjust: exact; }
+      .hero-actions, .section-nav, .search, .footer { display: none; }
+      section, .metric { box-shadow: none; break-inside: avoid; }
+      th { position: static; color: #111; background: #e5eaf0 !important; }
+      td, th { padding: 7px; font-size: 8pt; }
+      table { min-width: 0; }
+      .table-wrap { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Quality assurance · Test design</p>
+      <h1>Coupon &amp; loyalty discount rules</h1>
+      <p class="intro">A focused QA review of discount stacking, the 40% order-subtotal cap, and coupon exclusions for sale items.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#test-cases">Explore test cases <span aria-hidden="true">&nbsp;→</span></a>
+        <button class="button" type="button" onclick="window.print()">Print / Save as PDF</button>
+      </div>
+    </header>
+
+    <div class="metrics" aria-label="Test plan overview">
+      <div class="metric"><strong>17</strong><span>Detailed test cases</span></div>
+      <div class="metric"><strong>40%</strong><span>Maximum combined discount</span></div>
+      <div class="metric"><strong>3</strong><span>Boundary points covered</span></div>
+      <div class="metric"><strong>4</strong><span>Analysis and test sections</span></div>
+    </div>
+
+    <nav class="section-nav" aria-label="Page sections">
+      <a href="#conditions">01 &nbsp; Conditions</a>
+      <a href="#combinations">02 &nbsp; Combinations</a>
+      <a href="#boundaries">03 &nbsp; Boundaries</a>
+      <a href="#test-cases">04 &nbsp; Test cases</a>
+    </nav>
+
+  <section id="conditions">
+    <div class="section-heading"><div><h2>01 &nbsp; Individual conditions</h2><p class="section-note">Break the requirement into atomic rules and clarify assumptions.</p></div><span class="section-tag">8 conditions · 2 assumptions</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Individual condition</th><th>Relevant values / interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>C1</td><td>Promotional coupon count</td><td>None, one, or an attempted second coupon; maximum allowed is one.</td></tr>
+          <tr><td>C2</td><td>Loyalty-points redemption</td><td>None or one redemption on the same order as a coupon.</td></tr>
+          <tr><td>C3</td><td>Coupon eligibility by item price status</td><td>Regular-price items are eligible; already-discounted sale items are ineligible for coupon discount.</td></tr>
+          <tr><td>C4</td><td>Cart composition</td><td>Regular-price items only, sale items only, or a mixed cart.</td></tr>
+          <tr><td>C5</td><td>Combined discount rate</td><td>Combined coupon and points value is below, exactly at, or above 40% of order subtotal.</td></tr>
+          <tr><td>C6</td><td>Order subtotal</td><td>Positive subtotal; the cap uses order subtotal as its denominator.</td></tr>
+          <tr><td>C7</td><td>Discount allocation and calculation</td><td>Coupon must not discount sale items. The cart-level combined discount cap applies regardless of allocation.</td></tr>
+          <tr><td>C8</td><td>State changes</td><td>Cart subtotal, coupon, or points amount may change; eligibility and cap must be recalculated.</td></tr>
+          <tr><td>A1</td><td>Assumptions and unresolved behavior</td><td>Tests use valid, otherwise eligible coupons and sufficient points unless stated. The requirement does not specify whether excess discounts are rejected or automatically reduced; either is acceptable only if the combined discount never exceeds 40%. Mixed-cart coupon behavior is tested as applying only to regular-price items; confirm if business rules instead reject the coupon for any cart containing a sale item.</td></tr>
+          <tr><td>A2</td><td>Calculation precision</td><td>Use currency precision for assertions. Boundary cases should be repeated with the currency rounding rules supported by the application; the rounding method is not specified.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="combinations">
+    <div class="section-heading"><div><h2>02 &nbsp; Meaningful combinations</h2><p class="section-note">Cover how coupon, points, cart contents, and cap outcomes interact.</p></div><span class="section-tag">10 combinations</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Coupon</th><th>Points redemption</th><th>Cart composition</th><th>Combined rate / condition</th><th>Meaningful expected behavior</th></tr></thead>
+        <tbody>
+          <tr><td>K1</td><td>None</td><td>None</td><td>Regular only</td><td>0%</td><td>No discount; baseline order subtotal.</td></tr>
+          <tr><td>K2</td><td>One valid coupon</td><td>None</td><td>Regular only</td><td>Below 40%</td><td>Coupon applies; total discount remains within cap.</td></tr>
+          <tr><td>K3</td><td>None</td><td>One redemption</td><td>Regular only</td><td>Below 40%</td><td>Points apply; total discount remains within cap.</td></tr>
+          <tr><td>K4</td><td>One valid coupon</td><td>One redemption</td><td>Regular only</td><td>Below 40%</td><td>Both discounts apply to the same order; combined discount stays below cap.</td></tr>
+          <tr><td>K5</td><td>One valid coupon</td><td>One redemption</td><td>Regular only</td><td>Exactly 40%</td><td>Both may apply; total discount equals, but does not exceed, cap.</td></tr>
+          <tr><td>K6</td><td>One valid coupon</td><td>One redemption</td><td>Regular only</td><td>Above 40% requested</td><td>Excess is rejected or reduced; final combined discount cannot exceed cap.</td></tr>
+          <tr><td>K7</td><td>One valid coupon</td><td>None or one redemption</td><td>Sale only</td><td>Any request</td><td>Coupon provides no discount on sale items; points eligibility remains governed by points rules.</td></tr>
+          <tr><td>K8</td><td>One valid coupon</td><td>One redemption</td><td>Mixed regular and sale</td><td>Below / at / above cap</td><td>Coupon affects only regular items; points and coupon combined value obeys order-level cap.</td></tr>
+          <tr><td>K9</td><td>Attempt second coupon</td><td>One or no redemption</td><td>Regular or mixed</td><td>Any</td><td>Second coupon is not stacked; one coupon maximum. Permitted points redemption remains subject to cap.</td></tr>
+          <tr><td>K10</td><td>One coupon and points</td><td>One redemption</td><td>Regular or mixed</td><td>Cart changes after apply</td><td>Recompute subtotal, coupon allocation, and cap after item removal or change.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="boundaries">
+    <div class="section-heading"><div><h2>03 &nbsp; Boundary values</h2><p class="section-note">Probe the exact discount limit and changes that can invalidate a previously valid total.</p></div><span class="section-tag">7 boundary checks</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Boundary</th><th>Example on $100 subtotal</th><th>Expected check</th></tr></thead>
+        <tbody>
+          <tr><td>B1</td><td>Just below cap</td><td>Combined discount $39.99 (39.99%)</td><td>Allowed; never exceed the subtotal-derived cap.</td></tr>
+          <tr><td>B2</td><td>At cap</td><td>Combined discount $40.00 (40%)</td><td>Allowed; exact maximum.</td></tr>
+          <tr><td>B3</td><td>Just above cap</td><td>Combined discount $40.01 (40.01%)</td><td>Reject or reduce; final discount no more than $40.00.</td></tr>
+          <tr><td>B4</td><td>Different subtotal after cart edit</td><td>Subtotal drops from $100 to $80; prior discounts total $40</td><td>Recalculate; maximum becomes $32.00.</td></tr>
+          <tr><td>B5</td><td>Coupon eligibility boundary by item</td><td>Regular-price and sale items in one order</td><td>Coupon discount is allocated to regular item(s) only; sale item gets $0 coupon discount.</td></tr>
+          <tr><td>B6</td><td>Stacking cardinality boundary</td><td>Attempt to add a second coupon after the first</td><td>At most one coupon remains applied.</td></tr>
+          <tr><td>B7</td><td>Rounding boundary</td><td>Discount values near 40% at currency precision</td><td>Apply documented currency rounding consistently; never exceed the cap due to rounding.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="test-cases">
+    <div class="section-heading"><div><h2>04 &nbsp; Test cases</h2><p class="section-note">Execution-ready scenarios with test data, steps, expected results, and priorities.</p></div><span class="section-tag">17 scenarios</span></div>
+    <div class="table-toolbar">
+      <p>Filter scenarios by ID, behavior, input, or expected outcome.</p>
+      <input class="search" id="test-search" type="search" placeholder="Search test cases..." aria-label="Search test cases">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Test Case ID</th><th>Scenario</th><th>Test Data / Preconditions</th><th>Steps</th><th>Expected Result</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>TC-01</td><td>Baseline with no discounts</td><td>Subtotal $100 regular-price items; no coupon or points</td><td>Review cart and order summary.</td><td>No coupon or points discount; subtotal is $100.</td><td class="priority-medium">Medium</td></tr>
+          <tr><td>TC-02</td><td>Coupon-only discount below cap</td><td>Subtotal $100 regular-price items; coupon worth $25</td><td>Apply one valid coupon.</td><td>Coupon applies; combined discount is $25 (25%), within 40%.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-03</td><td>Points-only discount below cap</td><td>Subtotal $100 regular-price items; redeem points worth $20</td><td>Redeem points.</td><td>Points apply; combined discount is $20 (20%), within 40%.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-04</td><td>Coupon and points on same order below cap</td><td>Subtotal $100 regular-price items; coupon $20; points $19</td><td>Apply coupon and redeem points.</td><td>Both apply to the same order; total discount is $39 (39%).</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-05</td><td>Combined discount just below cap</td><td>Subtotal $100 regular-price items; coupon $24.99; points $15</td><td>Apply coupon and redeem points.</td><td>Both apply; total discount is $39.99 (39.99%).</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-06</td><td>Combined discount exactly at cap</td><td>Subtotal $100 regular-price items; coupon $25; points $15</td><td>Apply coupon and redeem points.</td><td>Both apply; total discount is exactly $40 (40%), never more.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-07</td><td>Combined discount just above cap</td><td>Subtotal $100 regular-price items; coupon $25; points requested $15.01</td><td>Apply coupon and attempt points redemption.</td><td>Excess is rejected or reduced; final combined discount does not exceed $40.</td><td class="priority-critical">Critical</td></tr>
+          <tr><td>TC-08</td><td>Coupon-only discount at cap</td><td>Subtotal $100 regular-price items; coupon worth $40</td><td>Apply coupon.</td><td>Coupon applies; discount is exactly 40%.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-09</td><td>Points-only redemption at cap</td><td>Subtotal $100 regular-price items; points worth $40</td><td>Redeem points.</td><td>Points apply; discount is exactly 40%.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-10</td><td>Coupon on sale item only</td><td>Subtotal $50 entirely sale items; valid coupon</td><td>Apply coupon.</td><td>Coupon is invalid for sale items and provides $0 discount; customer receives a clear eligibility indication.</td><td class="priority-critical">Critical</td></tr>
+          <tr><td>TC-11</td><td>Coupon in mixed sale and regular cart</td><td>Subtotal $50 sale item + $50 regular item; coupon worth $20</td><td>Apply coupon.</td><td>Coupon discount applies only to eligible regular-price item(s); sale item receives $0 coupon discount.</td><td class="priority-critical">Critical</td></tr>
+          <tr><td>TC-12</td><td>Coupon plus points with sale item in cart</td><td>Subtotal $50 sale + $50 regular; coupon $20; points $20</td><td>Apply coupon and redeem points.</td><td>Coupon excludes sale item; both discounts may apply and combined discount is $40 (40%) or less.</td><td class="priority-critical">Critical</td></tr>
+          <tr><td>TC-13</td><td>Second coupon stacking attempt</td><td>Subtotal $100 regular items; coupon A and coupon B valid; points worth $10</td><td>Apply coupon A, attempt coupon B, then redeem points.</td><td>At most one coupon applies; points can be redeemed if otherwise eligible; combined discount stays within cap.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-14</td><td>Recalculate cap after subtotal decreases</td><td>Subtotal $100; coupon $25 and points $15 applied; remove a $20 regular item</td><td>Remove item and review discount summary.</td><td>New subtotal is $80; total discount is reduced or rejected as needed so it does not exceed $32.</td><td class="priority-critical">Critical</td></tr>
+          <tr><td>TC-15</td><td>Sale item status changes after coupon</td><td>Mixed cart with sale and regular item; coupon applied; change regular item to sale item</td><td>Change item to sale status or refresh cart.</td><td>Coupon is recalculated; newly sale-priced item receives no coupon discount; cap remains enforced.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-16</td><td>Order totals remain consistent at checkout</td><td>Eligible regular or mixed order with coupon and points within cap</td><td>Proceed through checkout and inspect confirmation and order record.</td><td>Cart, checkout, confirmation, and saved order show consistent discount values; combined discount is at most 40% of subtotal.</td><td class="priority-high">High</td></tr>
+          <tr><td>TC-17</td><td>Currency precision near cap</td><td>Subtotal $100; eligible discounts total $40.004 before currency rounding, if supported</td><td>Apply both discounts and inspect final charged amount.</td><td>After currency rounding, effective discount does not exceed the 40% cap.</td><td class="priority-medium">Medium</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote"><strong>Interpretation note:</strong> For discounts above the cap, the requirement does not define whether the system rejects the excess or automatically reduces it. Either implementation should pass only if the final discount never exceeds 40% of the applicable order subtotal.</p>
+  </section>
+    <footer class="footer">Coupon &amp; loyalty discount QA · Generated test design</footer>
+  </main>
+  <script>
+    const search = document.getElementById("test-search");
+    const testRows = document.querySelectorAll("#test-cases tbody tr");
+    search.addEventListener("input", () => {
+      const query = search.value.trim().toLowerCase();
+      testRows.forEach((row) => {
+        row.hidden = !row.textContent.toLowerCase().includes(query);
+      });
+    });
+  </script>
+</body>
+</html>

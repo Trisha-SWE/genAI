@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Expiry Notification — Requirement Review</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 2rem auto;
+            max-width: 1100px;
+            padding: 0 1rem;
+            color: #222;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Subscription Expiry Notification — Requirement Review</h1>
+
+    <p>
+        The requirement is not yet specific enough to design reliable tests.
+        “About to expire,” “the user,” and “in time” need measurable definitions,
+        and several delivery and eligibility rules are unstated.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Finding</th>
+                <th>Question for the Product Owner</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>“About to expire” has no defined lead time.</strong> It could mean a fixed number of days, a
+                    configurable window, or multiple reminders.</td>
+                <td>How long before expiry should the notification be sent? Should there be one notification or a
+                    schedule of reminders?</td>
+            </tr>
+            <tr>
+                <td><strong>The triggering time and boundary are unclear.</strong> “When” could refer to a scheduled
+                    time, a date boundary, or a system event.</td>
+                <td>At what exact date and time should the system trigger the notification? What timezone applies, and
+                    how should the expiry date itself be interpreted?</td>
+            </tr>
+            <tr>
+                <td><strong>“Subscription” is underspecified.</strong> Subscription types may have different expiry
+                    rules, such as paid, trial, monthly, or annual plans.</td>
+                <td>Which subscription types and statuses qualify? How should trials, paused subscriptions, grace
+                    periods, or subscriptions already set to renew automatically be handled?</td>
+            </tr>
+            <tr>
+                <td><strong>“The user” may not identify the recipient.</strong> An account could have multiple users, an
+                    administrator, or a billing contact.</td>
+                <td>Who should receive the notification: the subscriber, account owner, billing contact, all account
+                    users, or someone else?</td>
+            </tr>
+            <tr>
+                <td><strong>Multiple subscriptions are not addressed.</strong> One user may hold multiple subscriptions
+                    with different expiry dates.</td>
+                <td>Should each expiring subscription generate a separate notification, or should notifications be
+                    consolidated?</td>
+            </tr>
+            <tr>
+                <td><strong>“Send a notification” does not specify channel or delivery expectations.</strong> It could
+                    mean email, SMS, push, an in-app message, or several channels.</td>
+                <td>Which channel or channels should be used? Is successful delivery required, or is an attempted send
+                    sufficient? What should happen if delivery fails?</td>
+            </tr>
+            <tr>
+                <td><strong>User preferences and eligibility are unstated.</strong> Users may have disabled certain
+                    channels or opted out of non-essential messages.</td>
+                <td>Should notification preferences, consent, locale, or contactability affect sending? Which rules take
+                    precedence?</td>
+            </tr>
+            <tr>
+                <td><strong>Changes after scheduling are unhandled.</strong> A subscription might be renewed, cancelled,
+                    or changed before the reminder is sent.</td>
+                <td>Should the system recheck subscription status immediately before sending and suppress the
+                    notification if it is no longer due to expire?</td>
+            </tr>
+            <tr>
+                <td><strong>“So they can renew it in time” is not measurable.</strong> The requirement does not define
+                    how much renewal time is needed or what “in time” means.</td>
+                <td>What is the latest acceptable notification time relative to expiry, and what user action or outcome
+                    counts as renewing in time?</td>
+            </tr>
+            <tr>
+                <td><strong>Notification content and renewal route are unspecified.</strong> The user may need the
+                    expiry date, plan details, or a renewal link.</td>
+                <td>What information must the notification include, and should it provide a direct renewal action or
+                    link?</td>
+            </tr>
+            <tr>
+                <td><strong>Duplicate and repeat sends are not controlled.</strong> Retries or repeated processing could
+                    send multiple notifications.</td>
+                <td>What is the allowed number of notifications per subscription and reminder window? How should retries
+                    avoid duplicates?</td>
+            </tr>
+            <tr>
+                <td><strong>Operational edge cases are missing.</strong> Delivery may be delayed, the account may be
+                    inaccessible, or the subscription may have no valid contact details.</td>
+                <td>What should happen when the notification cannot be sent or the user has no valid contact method? Is
+                    the failure recorded or escalated?</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
